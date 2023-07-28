@@ -16,10 +16,39 @@ function App() {
   }
 
   React.useEffect(() => {
-    setMemeArray(getMemes());
+    async function fetchMemes() {
+      const memes = await getMemes();
+      setMemeArray(memes);
+    }
+    fetchMemes();
   }, []);
 
-  console.log(memeArray);
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  function createCards() {
+    let tempCards = [];
+    let k = 0;
+
+    let howMany = level + 3;
+    while (k < howMany) {
+      k++;
+      let randNum = Math.floor(Math.random() * 100);
+      tempCards.push(memeArray[randNum]);
+    }
+    setAllCards(tempCards);
+  }
+
+  React.useEffect(() => {
+    createCards();
+  }, [level]);
+
+  console.log(allCards);
 
   return <Scoring score={score} bestScore={bestScore} level={level} />;
 }
